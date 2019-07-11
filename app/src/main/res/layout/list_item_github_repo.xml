@@ -69,8 +69,6 @@
 										android:textStyle="bold"
 										tools:text="Flap Jacks"/>
 						</RelativeLayout>
-
 				</RelativeLayout>
-
 		</android.support.v7.widget.CardView>
 </LinearLayout>
