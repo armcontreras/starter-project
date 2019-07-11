@@ -1,64 +1,51 @@
 package com.possible.demo
 
 import android.content.Context
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.possible.demo.model.GithubRepo
 import com.squareup.picasso.Picasso
 
 
-class GitHubRepoAdapter: BaseAdapter() {
-    private var gitHubRepos: List<GithubRepo> = ArrayList()
+class GitHubRepoAdapter: RecyclerView.Adapter<GitHubRepoAdapter.ViewHolder>() {
 
-    override fun getCount(): Int = gitHubRepos.size
+    private var gitHubFollowerList: List<GithubRepo> = ArrayList()
+    private var context: Context?= null
 
-    override fun getItem(position: Int): GithubRepo? {
-        return if(position < 0 || position >= gitHubRepos.size) {
-            return null
-        } else {
-            gitHubRepos[position]
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_github_repo, parent, false)
+        context = parent.context
+        return ViewHolder(view)
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
+    override fun getItemCount(): Int = gitHubFollowerList.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        println("Follower Size: " + gitHubFollowerList.size)
+        holder.bindItems(gitHubFollowerList[position], context)
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-        val view: View = convertView ?: createView(parent)
-        val viewHolder = view.tag as GitHubRepoViewHolder
-        viewHolder.setGitHubRepo(getItem(position), parent.context)
-        return view
-    }
-
-    private fun createView(parent: ViewGroup): View {
-        val inflater: LayoutInflater = LayoutInflater.from(parent.context)
-        val view: View = inflater.inflate(R.layout.list_item_github_repo, parent, false)
-        val viewHolder = GitHubRepoViewHolder(view)
-        view.tag = viewHolder
-        return view
+    private fun clearList() {
+        gitHubFollowerList = listOf()
+        notifyDataSetChanged()
     }
 
     fun setGitHubRepos(repos: List<GithubRepo>) {
         clearList()
-        gitHubRepos = repos
+        gitHubFollowerList = repos
         notifyDataSetChanged()
     }
 
-    private fun clearList() {
-        gitHubRepos = listOf()
-        notifyDataSetChanged()
-    }
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    class GitHubRepoViewHolder(view: View) {
-        private var repoAvatar: ImageView = view.findViewById(R.id.follower_icon)
-        private var textName: TextView = view.findViewById(R.id.text_login_name)
+        private var repoAvatar: ImageView = itemView.findViewById(R.id.follower_icon)
+        private var textName: TextView = itemView.findViewById(R.id.text_login_name)
 
-        fun setGitHubRepo(gitHubRepo: GithubRepo?, context: Context) {
+        fun bindItems(gitHubRepo: GithubRepo?, context: Context?) {
             Picasso.with(context).load(gitHubRepo?.avatar_url).into(repoAvatar)
             textName.text = gitHubRepo?.login
         }
