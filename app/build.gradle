@@ -43,6 +43,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+    }
+
     packagingOptions {
         exclude 'META-INF/maven/com.squareup.okhttp/okhttp/pom.properties'
         exclude 'META-INF/maven/com.squareup.okhttp/okhttp/pom.xml'
@@ -91,6 +95,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime:${ANDROIDX_ARCHCOMPONENTS_VERSION}"
     implementation "androidx.lifecycle:lifecycle-extensions:${ANDROIDX_ARCHCOMPONENTS_VERSION}"
     kapt "androidx.lifecycle:lifecycle-compiler:${ANDROIDX_ARCHCOMPONENTS_VERSION}"
+    implementation "androidx.room:room-runtime:${ANDROIDX_ROOM}"
+    kapt "androidx.room:room-compiler:${ANDROIDX_ROOM}" // For Kotlin use kapt instead of annotationProcessor
+    implementation "androidx.navigation:navigation-fragment-ktx:$NAV_VERSION"
+    implementation "androidx.navigation:navigation-ui-ktx:$NAV_VERSION"
 
     // Frameworks
     implementation "com.squareup.retrofit2:retrofit:${RETROFIT_VERSION}"
